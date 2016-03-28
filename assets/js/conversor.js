@@ -1,10 +1,6 @@
 (function(exports) {
   "use strict";
 
-  function validar(expresion) {
-  
-  }
-
   function Medida(valor,tipo)
   {
     /* tipo es opcional. Debería admitir  new Medida("45.2 Km") */
@@ -12,6 +8,10 @@
     this.valor = valor || 0;
     this.tipo = tipo || "vacio";
     console.log("medida");
+  }
+
+  Medida.validar = function (expresion) {
+
   }
 
   function Temperatura(valor,tipo)
@@ -26,29 +26,29 @@
 
   function Celsius(valor)
   {
-    Temperatura.call(this, valor);
+    Temperatura.call(this, valor, "c");
   }
   Celsius.prototype = new Temperatura();
   Celsius.prototype.constructor = Celsius;
   Celsius.prototype.toFarenheit = function() {
-    return ((this.value * 9/5) + 32);
+    return ((this.valor * 9/5) + 32);
   };
 
   Celsius.prototype.toKelvin = function() {
-    return (this.value + 273.15);
+    return (this.valor + 273.15);
   };
 
   function Farenheit(valor)
   {
-    Temperatura.call(this, valor);
+    Temperatura.call(this, valor, "f");
   }
   Farenheit.prototype = new Temperatura();
   Farenheit.prototype.constructor = Farenheit;
   Farenheit.prototype.toCelsius = function(){
-    return ((this.value - 32)* 5/9);
+    return ((this.valor - 32)* 5/9);
   };
   Farenheit.prototype.toKelvin = function(){
-    return (((this.value - 32)*5/9) + 273);
+    return (((this.valor - 32)*5/9) + 273);
   };
 
   exports.Temperatura = Temperatura;
@@ -80,10 +80,10 @@
           break;
 
         default:
-          elemento.innerHTML = "Error! Parace haber un error en la entrada. Inténtelo de nuevo"
+          elemento.innerHTML = "Ese tipo de dato no está definido. Inténtelo de nuevo."
       }
     }
     else
-      elemento.innerHTML = "";
+      elemento.innerHTML = "Error! Parace haber un error en la entrada. Inténtelo de nuevo";
   };
 })(this);
