@@ -10,9 +10,15 @@
     console.log("medida");
   }
 
-  Medida.validar = function (expresion) {
+  var regexp = XRegExp('(\\s)*'+
+                      '(?<cantidad> [+-]? [0-9]+ (.? [0-9]+)? (?:e [+-]? [0-9]+)?)' +
+                      '(\\s)*' +
+                      '(?<unidad> ([a-z,A-Z]+))' +
+                      '(\\s)*' +
+                      '(to)?' +
+                      '(\\s)*' +
+                      '(?<to> [fck])', 'x');
 
-  }
 
   function Temperatura(valor,tipo)
   {
@@ -37,6 +43,9 @@
   Celsius.prototype.toKelvin = function() {
     return (this.valor + 273.15);
   };
+  Celsius.prototype.toCelsius = function() {
+    return (this.valor);
+  };
 
   function Farenheit(valor)
   {
@@ -50,6 +59,23 @@
   Farenheit.prototype.toKelvin = function(){
     return (((this.valor - 32)*5/9) + 273);
   };
+  Farenheit.prototype.toFarenheit = function() {
+    return (this.valor);
+  };
+  function Kelvin(valor) {
+    Temperatura.call(this, valor, "k");
+  }
+  Kelvin.prototype = new Temperatura();
+  Kelvin.prototype.constructor = Kelvin;
+  Kelvin.prototype.toCelsius = function() {
+    return (this.valor-273.15);
+  };
+  Kelvin.prototype.toFarenheit = function() {
+    return (((9*this.valor - 273.15)/5)+32);
+  };
+  Kelvin.prototype.toKelvin = function() {
+    return (this.valor);
+  };
 
   exports.Temperatura = Temperatura;
   exports.Celsius = Celsius;
@@ -57,30 +83,51 @@
 
   exports.convertir = function() {
     var valor     = document.getElementById('convert').value,
-        elemento  = document.getElementById('converted'),
+        elemento  = document.getElementById('converted');
         /* Extienda la RegeExp a la especificación. use una XRegExp */
-        regexp    = /^\s*([-+]?\d+(?:\.\d+)?(?:e[+-]?\d+)?)\s*([a-z,A-Z]+)\s*$/i;
-    valor     = valor.match(regexp);
+        //regexp    = /^\s*([-+]?\d+(?:\.\d+)?(?:e[+-]?\d+)?)\s*([a-z,A-Z]+)\s*$/i;
+    valor = valor.toLowerCase();
+    valor = XRegExp.exec(valor, regexp);
 
     if (valor) {
-      var numero = valor[1],
-          tipo   = valor[2].toLowerCase();
+      var numero = valor.cantidad,
+          tipo   = valor.unidad,
+          destino = valor.to;
 
       numero = parseFloat(numero);
-      console.log("Valor: " + numero + ", Tipo: " + tipo);
+      console.log("Valor: " + numero + ", Tipo: " + tipo + ", Destino: " + destino);
 
       switch (tipo) {
         case 'c':
           var celsius = new Celsius(numero);
-          elemento.innerHTML = celsius.toFarenheit().toFixed(2) + " Farenheit";
+          if (destino == 'f')
+            elemento.innerHTML = celsius.toFarenheit().toFixed(2) + " Farenheit";
+          if (destino == 'c')
+            elemento.innerHTML = celsius.toCelsius().toFixed(2) + " Celsius";
+          if (destino == 'k')
+            elemento.innerHTML = celsius.toKelvin().toFixed(2) + " Kelvin";
           break;
         case 'f':
           var farenheit = new Farenheit(numero);
-          elemento.innerHTML = farenheit.toCelsius().toFixed(2) + " Celsius";
+          if (destino == 'f')
+            elemento.innerHTML = farenheit.toFarenheit().toFixed(2) + " Farenheit";
+          if (destino == 'c')
+            elemento.innerHTML = farenheit.toCelsius().toFixed(2) + " Celsius";
+          if (destino == 'k')
+            elemento.innerHTML = farenheit.toKelvin().toFixed(2) + " Kelvin";
+          break;
+        case 'k':
+          var kelvin = new Kelvin(numero);
+          if (destino == 'f')
+            elemento.innerHTML = kelvin.toFarenheit().toFixed(2) + " Farenheit";
+          if (destino == 'c')
+            elemento.innerHTML = kelvin.toCelsius().toFixed(2) + " Celsius";
+          if (destino == 'k')
+            elemento.innerHTML = kelvin.toKelvin().toFixed(2) + " Kelvin";
           break;
 
         default:
-          elemento.innerHTML = "Ese tipo de dato no está definido. Inténtelo de nuevo."
+          elemento.innerHTML = "Ese tipo de dato no está definido. Inténtelo de nuevo.";
       }
     }
     else
