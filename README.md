@@ -5,13 +5,15 @@ Este repositorio aloja la práctica de conversión de tipos, realizada con html,
 
 **Repositorio GitHuB**
 
-* [Repositorio]()
+* [Repo personal](https://github.com/tania77/object-oriented-programming-in-js-tania-dsi-1516)
+* [Repo organización](https://github.com/ULL-ESIT-GRADOII-DSI/object-oriented-programming-in-js-tania-dsi-1516)
 
 **Página de la práctica**
 
-* [Web]()
+* [Personal](http://tania77.github.io/object-oriented-programming-in-js-tania-dsi-1516/)
+* [Organización](http://ull-esit-gradoii-dsi.github.io/object-oriented-programming-in-js-tania-dsi-1516/)
 
 **Página del autor**
 
-* [Web Author]()
+* [Página personal](http://tania77.github.io/)
 
